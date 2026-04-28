@@ -3,8 +3,13 @@
 #include <iomanip>
 using namespace std;
 string getItemTypeName(ItemType t){
-    switch(t){case FOOD:return "Food";case TOY:return "Toy";
-    case MEDICINE:return "Medicine";case GIFT:return "Gift";}return "?";
+    switch(t){
+        case FOOD:return "Food";
+        case TOY:return "Toy";
+        case MEDICINE:return "Medicine";
+        case GIFT:return "Gift";
+    }
+    return "?";
 }
 vector<Item> getAllShopItems(){
     return {
@@ -26,34 +31,50 @@ vector<Item> getAllShopItems(){
     };
 }
 void displayInventory(const Pet& pet){
-    cout<<"\n  === "<<pet.name<<"'s Inventory ===\n";
-    if(pet.inventory.empty()){cout<<"  (empty)\n";return;}
-    for(size_t i=0;i<pet.inventory.size();i++){
+    cout << "\n  === " << pet.name << "'s Inventory ===\n";
+    if (pet.inventory.empty()){
+        cout << "  (empty)\n"; 
+        return;
+    }
+    for(size_t i=0; i < pet.inventory.size(); i++){
         const Item& it=pet.inventory[i];
-        cout<<"  ["<<i<<"] "<<left<<setw(16)<<it.name
-                 <<"  ("<<getItemTypeName(it.type)<<")  HNG+"<<it.hungerMod
-                 <<" HPY+"<<it.happyMod<<" HP+"<<it.healthMod<<"\n";
+        cout << "  [" << i << "] " << left << setw(16) << it.name
+                 << "  (" << getItemTypeName(it.type) << ")  HNG+" << it.hungerMod
+                 << " HPY+" << it.happyMod << " HP+" << it.healthMod << "\n";
     }
 }
 void displayShop(DifficultyLevel diff){
     auto cat=getAllShopItems(); int pm=shopDiscount(diff);
-    cout<<"\n  === TAMAGOTCHI SHOP ===\n";
+    cout << "\n  === TAMAGOTCHI SHOP ===\n";
     string cur="";
-    for(size_t i=0;i<cat.size();i++){
+    for(size_t i=0; i< cat.size(); i++){
         string tn=getItemTypeName(cat[i].type);
-        if(tn!=cur){cout<<"\n  -- "<<tn<<" --\n";cur=tn;}
-        cout<<"  ["<<i<<"] "<<left<<setw(16)<<cat[i].name
-                 <<"  "<<cat[i].price*pm/100<<" gold\n";
+        if (tn != cur){
+            cout << "\n  -- " << tn << " --\n";
+            cur=tn;
+        }
+        cout <<"  [" << i << "] " << left << setw(16) << cat[i].name << "  " << cat[i].price*pm/100 <<" gold\n";
     }
-    cout<<"\n";
+    cout << "\n";
 }
+
 string buyItem(Pet& pet,int idx,DifficultyLevel diff){
     auto cat=getAllShopItems();
-    if(idx<0||idx>=(int)cat.size()) return "Invalid item number.";
-    Item chosen=cat[idx]; int ap=chosen.price*shopDiscount(diff)/100;
-    if(pet.gold<ap) return "Not enough gold! Need "+to_string(ap);
-    if(pet.inventory.size()>=20) return "Inventory full! (max 20)";
-    pet.gold-=ap; pet.inventory.push_back(chosen);
+
+    if (idx < 0 || idx >= (int)cat.size()) 
+    return "Invalid item number.";
+
+    Item chosen=cat[idx]; 
+    int ap=chosen.price*shopDiscount(diff)/100;
+
+    if (pet.gold < ap) 
+    return "Not enough gold! Need "+to_string(ap);
+
+    if (pet.inventory.size() >= 20) 
+    return "Inventory full! (max 20)";
+
+    pet.gold-=ap; 
+    pet.inventory.push_back(chosen);
     return "Bought "+chosen.name+" for "+to_string(ap)+" gold!";
 }
 void giveStarterItems(Pet& pet){
