@@ -10,6 +10,14 @@ struct Item {
     std::string name; ItemType type;
     int hungerMod,happyMod,healthMod,energyMod,weightMod,price;
 };
+//adding personality effect to weight, health, energy, hunger, happiness
+enum PersonalityType
+{
+    CHEERFUL = 0, // happiness decays slower, play gives +bonus
+    GRUMPY = 1,   // happiness decays faster, hunger drains slower
+    LAZY = 2,     // prone to gain weight faster, energy drains slower
+    ANXIOUS = 3   // health drops faster when any stat is low
+};
 struct Pet {
     std::string name;
     int hunger,happiness,health,energy,weight,age,gold;
@@ -19,6 +27,10 @@ struct Pet {
     time_t lastSaveTime;
     std::vector<Item> inventory;
     std::vector<std::string> tricksLearned;
+// personalityrelated
+    PersonalityType personality;
+    std::string favoriteFoodName;
+    std::string dislikedFoodName;
 };
 struct GameState {
     Pet pet; DifficultyLevel difficulty;
