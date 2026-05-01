@@ -1,5 +1,5 @@
-#ifndef EVENTS_H
-#define EVENTS_H
+#ifndef events.h
+#define events.h
 
 #include "common.h"
 #include <string>
