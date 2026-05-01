@@ -7,9 +7,11 @@
 #include <cstdio>
 #include <iomanip>
 
+using namespace std;
+
 bool saveGame(const GameState &gs)
 {
-    std::ofstream f(SAVE_FILE);
+    ofstream f(SAVE_FILE);
     if (!f.is_open())
         return false;
     const Pet &p = gs.pet;
@@ -18,7 +20,7 @@ bool saveGame(const GameState &gs)
       << "\nage=" << p.age << "\ngold=" << p.gold << "\nisSick=" << p.isSick
       << "\nstage=" << (int)p.stage << "\ndifficulty=" << (int)gs.difficulty
       << "\nturnCount=" << gs.turnCount << "\nsaveTime=" << (long long)time(nullptr) << "\n";
-    f << "\npersonality=" << (int)p.personality
+    f << "personality=" << (int)p.personality
       << "\nfavFood=" << p.favoriteFoodName
       << "\ndislikeFood=" << p.dislikedFoodName << "\n";
     f << "trickCount=" << p.tricksLearned.size() << "\n";
@@ -32,63 +34,63 @@ bool saveGame(const GameState &gs)
           << "\niwt=" << it.weightMod << "\nipr=" << it.price << "\n";
     return true;
 }
-static std::string rv(std::ifstream &f)
+static string rv(ifstream &f)
 {
-    std::string l;
-    if (!std::getline(f, l))
+    string l;
+    if (!getline(f, l))
         return "";
     size_t e = l.find('=');
-    return e == std::string::npos ? "" : l.substr(e + 1);
+    return e == string::npos ? "" : l.substr(e + 1);
 }
 bool loadGame(GameState &gs)
 {
-    std::ifstream f(SAVE_FILE);
+    ifstream f(SAVE_FILE);
     if (!f.is_open())
         return false;
     Pet &p = gs.pet;
     long long savedTime = 0;
     p.name = rv(f);
-    p.hunger = std::stoi(rv(f));
-    p.happiness = std::stoi(rv(f));
-    p.health = std::stoi(rv(f));
-    p.energy = std::stoi(rv(f));
-    p.weight = std::stoi(rv(f));
-    p.age = std::stoi(rv(f));
-    p.gold = std::stoi(rv(f));
-    p.isSick = std::stoi(rv(f));
-    p.stage = (LifeStage)std::stoi(rv(f));
-    p.personality = (PersonalityType)std::stoi(rv(f));
+    p.hunger = stoi(rv(f));
+    p.happiness = stoi(rv(f));
+    p.health = stoi(rv(f));
+    p.energy = stoi(rv(f));
+    p.weight = stoi(rv(f));
+    p.age = stoi(rv(f));
+    p.gold = stoi(rv(f));
+    p.isSick = stoi(rv(f));
+    p.stage = (LifeStage)stoi(rv(f));
+    gs.difficulty = (DifficultyLevel)stoi(rv(f));
+    gs.turnCount = stoi(rv(f));
+    savedTime = stoll(rv(f));
+    p.personality = (PersonalityType)stoi(rv(f));
     p.favoriteFoodName = rv(f);
     p.dislikedFoodName = rv(f);
-    gs.difficulty = (DifficultyLevel)std::stoi(rv(f));
-    gs.turnCount = std::stoi(rv(f));
-    savedTime = std::stoll(rv(f));
     p.isSleeping = false;
     p.refusesFood = false;
     p.refusedFoodName = "";
-    int tc = std::stoi(rv(f));
+    int tc = stoi(rv(f));
     p.tricksLearned.clear();
     for (int i = 0; i < tc; i++)
         p.tricksLearned.push_back(rv(f));
-    int ic = std::stoi(rv(f));
+    int ic = stoi(rv(f));
     p.inventory.clear();
     for (int i = 0; i < ic; i++)
     {
         Item it;
         it.name = rv(f);
-        it.type = (ItemType)std::stoi(rv(f));
-        it.hungerMod = std::stoi(rv(f));
-        it.happyMod = std::stoi(rv(f));
-        it.healthMod = std::stoi(rv(f));
-        it.energyMod = std::stoi(rv(f));
-        it.weightMod = std::stoi(rv(f));
-        it.price = std::stoi(rv(f));
+        it.type = (ItemType)stoi(rv(f));
+        it.hungerMod = stoi(rv(f));
+        it.happyMod = stoi(rv(f));
+        it.healthMod = stoi(rv(f));
+        it.energyMod = stoi(rv(f));
+        it.weightMod = stoi(rv(f));
+        it.price = stoi(rv(f));
         p.inventory.push_back(it);
     }
     long elapsed = (long)(time(nullptr) - savedTime);
     if (elapsed > 0)
     {
-        std::cout << "\n  [" << elapsed / 60 << " min passed while away]\n";
+        cout << "\n  [" << elapsed / 60 << " min passed while away]\n";
         applyTimedDecay(p, gs.difficulty, elapsed);
     }
     gs.running = true;
@@ -97,13 +99,13 @@ bool loadGame(GameState &gs)
 }
 bool saveFileExists()
 {
-    std::ifstream f(SAVE_FILE);
+    ifstream f(SAVE_FILE);
     return f.good();
 }
-bool deleteSaveFile() { return std::remove(SAVE_FILE) == 0; }
-bool logDeath(const Pet &pet, const std::string &cause, DifficultyLevel diff)
+bool deleteSaveFile() { return remove(SAVE_FILE) == 0; }
+bool logDeath(const Pet &pet, const string &cause, DifficultyLevel diff)
 {
-    std::ofstream f(DEATH_LOG_FILE, std::ios::app);
+    ofstream f(DEATH_LOG_FILE, ios::app);
     if (!f.is_open())
         return false;
     time_t now = time(nullptr);
@@ -117,31 +119,31 @@ bool logDeath(const Pet &pet, const std::string &cause, DifficultyLevel diff)
 }
 struct LB
 {
-    std::string name, date;
+    string name, date;
     int age, score;
 };
-static std::vector<LB> readLB()
+static vector<LB> readLB()
 {
-    std::vector<LB> v;
-    std::ifstream f(LEADERBOARD_FILE);
+    vector<LB> v;
+    ifstream f(LEADERBOARD_FILE);
     if (!f.is_open())
         return v;
-    std::string l;
-    while (std::getline(f, l))
+    string l;
+    while (getline(f, l))
     {
         if (l.empty())
             continue;
-        std::istringstream ss(l);
+        istringstream ss(l);
         LB e;
-        std::string a, s;
-        std::getline(ss, e.date, '|');
-        std::getline(ss, e.name, '|');
-        std::getline(ss, a, '|');
-        std::getline(ss, s, '|');
+        string a, s;
+        getline(ss, e.date, '|');
+        getline(ss, e.name, '|');
+        getline(ss, a, '|');
+        getline(ss, s, '|');
         try
         {
-            e.age = std::stoi(a);
-            e.score = std::stoi(s);
+            e.age = stoi(a);
+            e.score = stoi(s);
         }
         catch (...)
         {
@@ -163,11 +165,11 @@ bool updateLeaderboard(const Pet &pet)
     e.score = pet.age * 10 + pet.health;
     e.date = buf;
     v.push_back(e);
-    std::sort(v.begin(), v.end(), [](const LB &a, const LB &b)
+    sort(v.begin(), v.end(), [](const LB &a, const LB &b)
               { return a.score > b.score; });
     if ((int)v.size() > MAX_LEADERBOARD)
         v.resize(MAX_LEADERBOARD);
-    std::ofstream f(LEADERBOARD_FILE);
+    ofstream f(LEADERBOARD_FILE);
     if (!f.is_open())
         return false;
     for (auto &x : v)
@@ -177,34 +179,34 @@ bool updateLeaderboard(const Pet &pet)
 void displayLeaderboard()
 {
     auto v = readLB();
-    std::cout << "\n  === TOP PETS LEADERBOARD ===\n";
+    cout << "\n  === TOP PETS LEADERBOARD ===\n";
     if (v.empty())
     {
-        std::cout << "  (no entries yet)\n\n";
+        cout << "  (no entries yet)\n\n";
         return;
     }
     for (size_t i = 0; i < v.size(); i++)
-        std::cout << "  " << i + 1 << ". " << std::left << std::setw(12) << v[i].name
-                  << "  Age:" << std::setw(4) << v[i].age << "  Score:" << v[i].score << "\n";
-    std::cout << "\n";
+        cout << "  " << i + 1 << ". " << left << setw(12) << v[i].name
+                  << "  Age:" << setw(4) << v[i].age << "  Score:" << v[i].score << "\n";
+    cout << "\n";
 }
 void displayDeathLog()
 {
-    std::ifstream f(DEATH_LOG_FILE);
-    std::cout << "\n  === DEATH LOG ===\n";
+    ifstream f(DEATH_LOG_FILE);
+    cout << "\n  === DEATH LOG ===\n";
     if (!f.is_open())
     {
-        std::cout << "  (no deaths yet)\n\n";
+        cout << "  (no deaths yet)\n\n";
         return;
     }
-    std::string l;
+    string l;
     int c = 0;
-    while (std::getline(f, l) && c < 10)
+    while (getline(f, l) && c < 10)
     {
-        std::cout << "  " << l << "\n";
+        cout << "  " << l << "\n";
         c++;
     }
     if (!c)
-        std::cout << "  (no deaths yet)\n";
-    std::cout << "\n";
+        cout << "  (no deaths yet)\n";
+    cout << "\n";
 }
