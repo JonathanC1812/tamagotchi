@@ -10,4 +10,4 @@ void applyPositiveEvent(Pet& pet, std::string& msg);
 void applyNeutralEvent(Pet& pet, std::string& msg);
 bool applyStageEvent(Pet& pet, std::string& msg);
 
-#endif // EVENTS_H
+#endif
