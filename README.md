@@ -1,1 +1,2 @@
-# tamagotchi
+Tamagotchi Terminal
+#Description: Tamagotchi Terminal is a text-based virtual pet game played entirely in the Linux terminal. The player adopts a pet from an egg and raises it through 6 life stages — Egg, Baby, Child, Teen, Adult, and Senior — by feeding, playing, healing, and caring for it. Neglect causes stats to drop and can lead to the pet's death. The game tracks real elapsed time, meaning stats decay even while the game is closed. A death log and leaderboard persist across all sessions.
