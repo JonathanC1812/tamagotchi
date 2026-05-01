@@ -68,7 +68,7 @@ static GameState newGame(){
     gs.difficulty=chooseDifficulty();
     gs.pet=initPet(name,gs.difficulty);
     gs.turnCount=0; gs.running=true;
-    gs.message="Welcome! "+name+" has hatched. Take good care!";
+    gs.message = "Welcome! " + name + " has hatched. " + "Personality: " + personalityName(gs.pet.personality) + ". Fav food: " + gs.pet.favoriteFoodName + "!";
     giveStarterItems(gs.pet);
     return gs;
 }
