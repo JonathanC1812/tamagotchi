@@ -95,6 +95,30 @@ void drawPetArt(LifeStage s) {
 }
 
 /* ---------- screens ---------- */
+void showIntroStory(const string& name) {
+    clearScreen();
+
+    drawLine('+', '-', '+');
+    printCentered("PROLOGUE");
+    drawLine('+', '-', '+');
+
+    cout << "\n";
+    cout << "  In a quiet digital world...\n\n";
+    cout << "  A small life is about to begin.\n\n";
+
+    cout << "  A mysterious egg was found glowing softly.\n";
+    cout << "  No one knew what was inside...\n\n";
+
+    cout << "  Until it responded to your presence.\n\n";
+
+    cout << "  The egg cracks...\n";
+    cout << "  and " << name << " is born.\n\n";
+
+    cout << "  Your journey together begins now.\n\n";
+
+    cout << "  [Press Enter to continue]";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
 
 void showWelcomeScreen() {
     clearScreen();
