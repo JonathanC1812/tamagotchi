@@ -106,6 +106,7 @@ void drawStatBars(const Pet& p) {
     cout << "  Happiness: " << bar(p.happiness) << " " << setw(3) << p.happiness << "%\n";
     cout << "  Health:    " << bar(p.health)    << " " << setw(3) << p.health    << "%\n";
     cout << "  Energy:    " << bar(p.energy)    << " " << setw(3) << p.energy    << "%\n";
+    cout << "  Clean:     " << bar(p.cleanliness) << " " << setw(3) << p.cleanliness << "%\n";
 }
 
 void drawMainScreen(const GameState& gs) {
@@ -144,8 +145,8 @@ void drawMainScreen(const GameState& gs) {
 
 void showMainMenu(const GameState&) {
     cout << "  [1] Feed    [2] Play    [3] Sleep   [4] Heal\n";
-    cout << "  [5] Shop    [6] Invent  [7] Status  [8] Leaderboard\n";
-    cout << "  [9] Save    [0] Quit\n";
+    cout << "  [5] Work    [6] Bath    [7] Shop    [8] Invent\n";
+    cout << "  [9] Status  [10] Leaderboard  [11] Save  [0] Quit\n";
     cout << "  Choice: ";
 }
 
