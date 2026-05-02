@@ -148,6 +148,7 @@ g++ -std=c++11 -Wall -o tamagotchi main.cpp pet.cpp events.cpp actions.cpp items
 | `ui.h / ui.cpp` | Terminal display, ASCII art, menus |
 | `main.cpp` | Game loop, difficulty selection, turn management |
 | `Makefile` | Build instructions |
+| `.gitignore` | Excludes the compiled binary (`tamagotchi`) and runtime-generated save files from version control |
 
 ---
 
