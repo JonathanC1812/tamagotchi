@@ -16,7 +16,7 @@ bool saveGame(const GameState &gs)
         return false;
     const Pet &p = gs.pet;
     f << "name=" << p.name << "\nhunger=" << p.hunger << "\nhappiness=" << p.happiness
-      << "\nhealth=" << p.health << "\nenergy=" << p.energy << "\nweight=" << p.weight
+      << "\nhealth=" << p.health << "\nenergy=" << p.energy << "\ncleanliness=" << p.cleanliness << "\nweight=" << p.weight
       << "\nage=" << p.age << "\ngold=" << p.gold << "\nisSick=" << p.isSick
       << "\nstage=" << (int)p.stage << "\ndifficulty=" << (int)gs.difficulty
       << "\nturnCount=" << gs.turnCount << "\nsaveTime=" << (long long)time(nullptr) << "\n";
@@ -54,6 +54,7 @@ bool loadGame(GameState &gs)
     p.happiness = stoi(rv(f));
     p.health = stoi(rv(f));
     p.energy = stoi(rv(f));
+    p.cleanliness = stoi(rv(f));
     p.weight = stoi(rv(f));
     p.age = stoi(rv(f));
     p.gold = stoi(rv(f));
