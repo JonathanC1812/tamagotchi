@@ -13,6 +13,7 @@ Pet initPet(const string &name, DifficultyLevel diff)
     p.happiness = 70;
     p.health = 100;
     p.energy = 100;
+    p.cleanliness = 80;
     p.weight = 10;
     p.age = 0;
     p.gold = 20;
