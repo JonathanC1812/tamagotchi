@@ -4,10 +4,10 @@
 using namespace std;
 string getItemTypeName(ItemType t){
     switch(t){
-        case FOOD:return "Food";
-        case TOY:return "Toy";
-        case MEDICINE:return "Medicine";
-        case GIFT:return "Gift";
+        case FOOD:return "🍎 Food";
+        case TOY:return "🎮 Toy";
+        case MEDICINE:return "💊 Medicine";
+        case GIFT:return "🎁 Gift";
     }
     return "?";
 }
