@@ -215,7 +215,7 @@ DifficultyLevel chooseDifficulty() {
 void showDeathScreen(const Pet& p, const string& cause) {
     clearScreen();
     drawLine('+', '-', '+');
-    printCentered("YOUR PET HAS DIED");
+    printCentered(p.name + " HAS DIED");
     drawLine('+', '-', '+');
     drawPetArt(DEAD);
     cout << "  " << p.name << " has passed away.\n";
