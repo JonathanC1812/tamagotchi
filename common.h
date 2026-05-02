@@ -35,6 +35,8 @@ int hunger,happiness,health,energy,cleanliness,weight,age,gold;
 struct GameState {
     Pet pet; DifficultyLevel difficulty;
     int turnCount; bool running; std::string message;
+    int luckyNumber;
+    int luckyTurnBase;
 };
 inline int  drainRate(DifficultyLevel d) { return d==EASY?1:d==HARD?4:2; }
 inline int  eventChance(DifficultyLevel d){ return d==EASY?5:d==HARD?20:12; }
