@@ -2,6 +2,7 @@
 #include <iostream>
 #include <iomanip>
 using namespace std;
+
 string getItemTypeName(ItemType t){
     switch(t){
         case FOOD:return "Food";
@@ -11,6 +12,7 @@ string getItemTypeName(ItemType t){
     }
     return "?";
 }
+
 vector<Item> getAllShopItems(){
     return {
         //foods
@@ -68,6 +70,100 @@ void displayShop(DifficultyLevel diff){
         cout <<"  [" << i << "] " << left << setw(16) << cat[i].name << "  " << cat[i].price*pm/100 <<" gold\n";
     }
     cout << "\n";
+
+    cout << "\n === RECOMMENDATIONS === \n";
+
+    //hunger
+    int bestHunger = 0;
+    string bestHungerName = "";
+    int bestHungerPrice = 0;
+
+    for (const auto& item : cat){
+        if (item.type == FOOD && item.hungerMod > bestHunger){
+            bestHunger = item.hungerMod;
+            bestHungerName = item.name;
+            bestHungerPrice = item.price;
+        }
+    }
+    cout << "BEST FOR HUNGER: " << bestHungerName <<  " (+" << bestHunger << " hunger, " << bestHungerPrice << " gold)\n";
+
+    //happiness
+    int bestHappy = 0;
+    string bestHappyName = "";
+    int bestHappyPrice = 0;
+
+    for (const auto& item : cat) {
+        if (item.type == TOY && item.happyMod > bestHappy) {
+            bestHappy = item.happyMod;
+            bestHappyName = item.name;
+            bestHappyPrice = item.price;
+        }
+    }
+
+    cout << "BEST FOR HAPPINESS: " << bestHappyName <<  " (+" << bestHappy << " happiness, " << bestHappyPrice << " gold)\n";
+
+    //health
+    int bestHealth = 0;
+    string bestHealthName = "";
+    int bestHealthPrice = 0;
+
+    for (const auto& item : cat) {
+        if (item.type == MEDICINE && item.healthMod > bestHealth) {
+            bestHealth = item.healthMod;
+            bestHealthName = item.name;
+            bestHealthPrice = item.price;
+        }
+    }
+
+    cout << "BEST FOR HEALTH: " << bestHealthName <<  " (+" << bestHealth << " health, " << bestHealthPrice << " gold)\n";
+
+    //energy
+    int bestEnergy = 0;
+    string bestEnergyName = "";
+    int bestEnergyPrice = 0;
+
+    for (const auto& item : cat) {
+        if (item.energyMod > bestEnergy) {
+            bestEnergy = item.energyMod;
+            bestEnergyName = item.name;
+            bestEnergyPrice = item.price;
+        }
+    }
+
+    cout << "BEST FOR ENERGY: " << bestEnergyName <<  " (+" << bestEnergy << " energy, " << bestEnergyPrice << " gold)\n";
+
+    //weight
+    int bestWeight = 0;
+    string bestWeightName = "";
+    int bestWeightPrice = 0;
+
+    for (const auto& item : cat) {
+        if (item.weightMod < bestWeight) {  // More negative = better for weight loss
+            bestWeight = item.weightMod;
+            bestWeightName = item.name;
+            bestWeightPrice = item.price;
+        }
+    }
+
+    if (bestWeight < 0) {
+        cout << "BEST FOR WEIGHT: " << bestWeightName 
+             << " (" << bestWeight << " weight, " << bestWeightPrice << " gold)\n";
+    }
+
+    //value
+    int cheapest = 9999;
+    string cheapestName = "";
+
+    for (const auto& item : cat) {
+        if (item.price < cheapest) {
+            cheapest = item.price;
+            cheapestName = item.name;
+        }
+    }
+
+    cout << "CHEAPEST ITEM: " << cheapestName << " (" << cheapest << " gold)\n";
+    cout << "\n";
+
 }
 
 string buyItem(Pet& pet,int idx,DifficultyLevel diff){
