@@ -124,6 +124,11 @@ static void drawMoodIndicator(const Pet& p) {
         face = "(x_x)"; line = "...";
     } else if (p.isSick) {
         face = "(>_<)"; line = "I am not feeling well... need medicine!";
+
+        cout << "           /\\___/\\\n"
+            "         =( x _ x )=\n"
+            "           / ~~~ \\\n"
+            "          (weak...)\n";
     } else if (p.hunger <= 20) {
         face = "(T_T)"; line = "So hungry... please feed me!";
     } else if (p.energy <= 20) {
@@ -167,14 +172,6 @@ void drawMainScreen(const GameState& gs) {
 
     cout << "  Weight: " << p.weight << "g"
          << "   Gold: " << p.gold << "\n";
-
-    if (p.isSick) {
-    cout << "           /\\___/\\\n"
-            "         =( x _ x )=\n"
-            "           / ~~~ \\\n"
-            "          (weak...)\n";
-    cout << "  !! PET IS SICK !! Use medicine!\n";
-    }
 
     drawMoodIndicator(p); 
     cout << "  Lucky #: [" << gs.luckyNumber << "]  "
