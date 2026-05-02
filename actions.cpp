@@ -218,7 +218,7 @@ std::string actionStatus(const GameState &gs)
       << "  Hunger:    " << bar(p.hunger) << "  " << p.hunger << "%\n"
       << "  Happiness: " << bar(p.happiness) << "  " << p.happiness << "%\n"
       << "  Health:    " << bar(p.health) << "  " << p.health << "%\n"
-      << "  Energy:    " << bar(p.energy) << "  " << p.energy << "%\n";
+      << "  Energy:    " << bar(p.energy) << "  " << p.energy << "%\n"
       << "  Clean:     " << bar(p.cleanliness) << "  " << p.cleanliness << "%\n";
     if (p.isSick)
         o << "  !! SICK !! Use medicine!\n";
