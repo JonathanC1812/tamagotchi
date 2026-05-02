@@ -31,14 +31,16 @@ Tamagotchi Terminal is a text-based virtual pet game played entirely in the Linu
 | Real-time stat decay | Stats drop based on real time elapsed since last save. If you close the game for 1 hour, the pet will be hungrier when you return. | File I/O — saves timestamp, computes elapsed seconds on load |
 | Random events | Every turn has a chance of a random event firing such as illness, mood swings, item drops, gold finds, and more. Probability scales with difficulty. | Random events — `rand()` with probability tables |
 | Dynamic inventory | Players can buy, use, and lose items. Inventory is a dynamically allocated vector that grows and shrinks at runtime. | Dynamic memory — `std::vector<Item>` |
-| Pet stats + life stages | Pet has 4 stats (Hunger, Happiness, Health, Energy) and evolves through 6 life stages based on age and stat thresholds. | Data structures — `Pet` struct, `Item` struct, `LifeStage` enum |
+| Pet stats + life stages | Pet has 6 stats (Hunger, Happiness, Health, Energy, Cleanliness, Weight) and evolves through 6 life stages based on age and stat thresholds. | Data structures — `Pet` struct, `Item` struct, `LifeStage` enum |
 | Multiple source files | Each module is split into a .h header and .cpp implementation file. | Program in multiple files |
 | Difficulty levels | Easy, Normal, and Hard scale stat drain rate, event frequency, shop prices, and enable/disable permadeath. | `DifficultyLevel` enum + inline helper functions in `common.h` (`drainRate`, `eventChance`, `shopDiscount`, `isPermadeath`) — each module calls these instead of hardcoding values |
 | Save / load game | Full game state is saved to `savegame.txt` and loaded on resume. Before each save, the previous file is copied to `savegame.bak` as a backup. | File I/O — `ofstream` with binary copy for backup; `restoreBackup()` recovers from `savegame.bak` |
 | Crash-safe loading | If `savegame.txt` is corrupted, incomplete, or from an incompatible version, the game catches the error and falls back to a new game instead of crashing. | Exception handling — `try/catch(...)` wrapping all parse calls in `loadGame`; `SAVE_VERSION` header checked on load |
 | Death log | Every pet death is recorded to `deaths.txt` with name, age, cause, and date. Players can also clear the log via `clearDeathLog()`. | File I/O — append mode for logging, truncate mode for clearing |
 | Leaderboard | Top 10 longest-lived pets are tracked in `leaderboard.txt`. Current live rank is computed in real time via `getLeaderboardRank()`. | File I/O — reads and sorts leaderboard entries to compute live rank |
-| Shop system | Players spend gold to buy food, toys, and medicine from a shop. Prices adjust based on difficulty. | Data structures + dynamic memory |
+| Shop system | Players spend gold to buy food, toys, and medicine from a shop. Prices adjust based on difficulty. The shop also shows a recommendations panel highlighting the best item per stat. | Data structures + dynamic memory — iterates `vector<Item>` to find best per category |
+| Work action | Players solve a random math puzzle (addition, subtraction, or multiplication) to earn gold. | Random number generation — `rand()` for operands and operator selection |
+| Bath action | Players can bathe their pet to restore cleanliness, which affects health over time. | Cleanliness stat — affects `health` decay in stat update logic |
 | Personality system | Each pet is assigned one of four personalities (Cheerful, Grumpy, Lazy, Anxious) that alter how stats decay and respond to actions. | `PersonalityType` enum + conditional logic in stat decay and action functions |
 
 ---
@@ -89,11 +91,13 @@ g++ -std=c++11 -Wall -o tamagotchi main.cpp pet.cpp events.cpp actions.cpp items
 | 2 | Play with pet (free play or use a toy) |
 | 3 | Sleep (restore energy) |
 | 4 | Heal (administer medicine) |
-| 5 | Open shop (buy food, toys, medicine) |
-| 6 | View inventory |
-| 7 | Full status screen |
-| 8 | Leaderboard |
-| 9 | Save game |
+| 5 | Work (solve a math puzzle to earn gold) |
+| 6 | Bath (clean pet to restore cleanliness) |
+| 7 | Open shop (buy food, toys, medicine) |
+| 8 | View inventory |
+| 9 | Full status screen |
+| 10 | Leaderboard |
+| 11 | Save game |
 | 0 | Quit |
 
 ---
