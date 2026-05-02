@@ -163,7 +163,9 @@ void drawMainScreen(const GameState& gs) {
     if (p.isSick)
         cout << "  !! PET IS SICK !! Use medicine!\n";
 
-       drawMoodIndicator(p);
+    drawMoodIndicator(p); 
+    cout << "  Lucky #: [" << gs.luckyNumber << "]  "
+         << "Pick it as your action for a surprise bonus!\n";
 
     cout << "\n";
     drawStatBars(p);
