@@ -39,6 +39,31 @@ static void handlePlay(GameState& gs){
     }
 }
 
+static void handleWork(GameState& gs){
+    int left = 1 + rand() % 10;
+    int right = 1 + rand() % 10;
+    char ops[] = {'+', '-', '*'};
+    char op = ops[rand() % 3];
+
+    // Keep subtraction questions easy and avoid negative answers.
+    if(op == '-' && right > left){
+        int temp = left;
+        left = right;
+        right = temp;
+    }
+
+    std::cout << "\n  Work task: Solve " << left << " " << op << " " << right << " = ";
+    int answer;
+    if(!(std::cin >> answer)){
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        gs.message = "Invalid answer.";
+        return;
+    }
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    gs.message = actionWork(gs, left, right, op, answer);
+}
+
 static void handleShop(GameState& gs){
     displayShop(gs.difficulty);
     std::cout<<"  Your gold: "<<gs.pet.gold<<"\n";
@@ -121,11 +146,13 @@ int main(){
             else gs.message=actionHeal(gs,idx);
             break;
         }
-        case 5: handleShop(gs); break;
-        case 6: displayInventory(gs.pet); pressEnterToContinue(); skipTurn=true; break;
-        case 7: std::cout<<actionStatus(gs)<<"\n"; pressEnterToContinue(); skipTurn=true; break;
-        case 8: displayLeaderboard(); pressEnterToContinue(); skipTurn=true; break;
-        case 9:
+        case 5: handleWork(gs); break;
+        case 6: gs.message=actionBath(gs); break;
+        case 7: handleShop(gs); break;
+        case 8: displayInventory(gs.pet); pressEnterToContinue(); skipTurn=true; break;
+        case 9: std::cout<<actionStatus(gs)<<"\n"; pressEnterToContinue(); skipTurn=true; break;
+        case 10: displayLeaderboard(); pressEnterToContinue(); skipTurn=true; break;
+        case 11:
             gs.message=saveGame(gs)?"Game saved!":"Save failed!";
             skipTurn=true; break;
         case 0: {
