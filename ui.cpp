@@ -109,6 +109,36 @@ void drawStatBars(const Pet& p) {
     cout << "  Clean:     " << bar(p.cleanliness) << " " << setw(3) << p.cleanliness << "%\n";
 }
 
+static void drawMoodIndicator(const Pet& p) {
+    string face, line;
+
+    if (p.stage == DEAD) {
+        face = "(x_x)"; line = "...";
+    } else if (p.isSick) {
+        face = "(>_<)"; line = "I am not feeling well... need medicine!";
+    } else if (p.hunger <= 20) {
+        face = "(T_T)"; line = "So hungry... please feed me!";
+    } else if (p.energy <= 20) {
+        face = "(-_-)"; line = "Can't keep eyes open... zzz...";
+    } else if (p.happiness <= 20) {
+        face = "(;_;)"; line = "I'm really boredd. Play with me?";
+    } else if (p.cleanliness <= 20) {
+        face = "(o_o)"; line = "I smell bad. Bath time please!";
+    } else if (p.health <= 30) {
+        face = "(._.)"; line = "Not feeling great.";
+    } else if (p.weight >= 40) {
+        face = "(o o)"; line = "Feeling a little heavy today...";
+    } else if (p.hunger >= 80 && p.happiness >= 80 && p.health >= 80) {
+        face = "(^v^)"; line = "Life is wonderful right now!";
+    } else if (p.happiness >= 70) {
+        face = "(^_^)"; line = "Pretty happy today!";
+    } else {
+        face = "(._.)"; line = "Just an ordinary day.";
+    }
+
+    cout << "  Mood: " << face << "  \"" << line << "\"\n";
+}
+
 void drawMainScreen(const GameState& gs) {
     clearScreen();
     const Pet& p = gs.pet;
@@ -132,6 +162,8 @@ void drawMainScreen(const GameState& gs) {
 
     if (p.isSick)
         cout << "  !! PET IS SICK !! Use medicine!\n";
+
+       drawMoodIndicator(p);
 
     cout << "\n";
     drawStatBars(p);
