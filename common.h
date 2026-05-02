@@ -20,7 +20,7 @@ enum PersonalityType
 };
 struct Pet {
     std::string name;
-    int hunger,happiness,health,energy,weight,age,gold;
+int hunger,happiness,health,energy,cleanliness,weight,age,gold;
     bool isSick,isSleeping,refusesFood;
     std::string refusedFoodName;
     LifeStage stage;
