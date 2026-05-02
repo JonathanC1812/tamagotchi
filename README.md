@@ -35,7 +35,7 @@ Tamagotchi Terminal is a text-based virtual pet game played entirely in the Linu
 | Multiple source files | Each module is split into a .h header and .cpp implementation file. | Program in multiple files |
 | Difficulty levels | Easy, Normal, and Hard scale stat drain rate, event frequency, shop prices, and enable/disable permadeath. | `DifficultyLevel` enum + inline helper functions in `common.h` (`drainRate`, `eventChance`, `shopDiscount`, `isPermadeath`) — each module calls these instead of hardcoding values |
 | Save / load game | Full game state is saved to `savegame.txt` and loaded on resume. Before each save, the previous file is copied to `savegame.bak` as a backup. | File I/O — `ofstream` with binary copy for backup; `restoreBackup()` recovers from `savegame.bak` |
-| Crash-safe loading | If `savegame.txt` is corrupted or incomplete, the game catches the error and falls back to a new game instead of crashing. | Exception handling — `try/catch(...)` wrapping all `stoi`/`stoll` parse calls in `loadGame` |
+| Crash-safe loading | If `savegame.txt` is corrupted, incomplete, or from an incompatible version, the game catches the error and falls back to a new game instead of crashing. | Exception handling — `try/catch(...)` wrapping all parse calls in `loadGame`; `SAVE_VERSION` header checked on load |
 | Death log | Every pet death is recorded to `deaths.txt` with name, age, cause, and date. Players can also clear the log via `clearDeathLog()`. | File I/O — append mode for logging, truncate mode for clearing |
 | Leaderboard | Top 10 longest-lived pets are tracked in `leaderboard.txt`. Current live rank is computed in real time via `getLeaderboardRank()`. | File I/O — reads and sorts leaderboard entries to compute live rank |
 | Shop system | Players spend gold to buy food, toys, and medicine from a shop. Prices adjust based on difficulty. | Data structures + dynamic memory |
@@ -128,7 +128,7 @@ g++ -std=c++11 -Wall -o tamagotchi main.cpp pet.cpp events.cpp actions.cpp items
 
 | File | Contents |
 |------|----------|
-| `savegame.txt` | Current pet state and last save timestamp |
+| `savegame.txt` | Current pet state; starts with a version header (`version=1`) to detect incompatible saves |
 | `savegame.bak` | Backup of the previous save; auto-created before each save |
 | `deaths.txt` | Log of all pet deaths with cause and date |
 | `leaderboard.txt` | Top 10 longest-lived pets sorted by score |

@@ -20,6 +20,7 @@ bool saveGame(const GameState &gs)
     if (!f.is_open())
         return false;
     const Pet &p = gs.pet;
+    f << "version=" << SAVE_VERSION << "\n";
     f << "name=" << p.name << "\nhunger=" << p.hunger << "\nhappiness=" << p.happiness
       << "\nhealth=" << p.health << "\nenergy=" << p.energy << "\ncleanliness=" << p.cleanliness << "\nweight=" << p.weight
       << "\nage=" << p.age << "\ngold=" << p.gold << "\nisSick=" << p.isSick
@@ -54,6 +55,11 @@ bool loadGame(GameState &gs)
         return false;
     try
     {
+        if (stoi(rv(f)) != SAVE_VERSION)
+        {
+            cout << "\n  [Save file version mismatch. Starting new game.]\n";
+            return false;
+        }
         Pet &p = gs.pet;
         long long savedTime = 0;
         p.name = rv(f);

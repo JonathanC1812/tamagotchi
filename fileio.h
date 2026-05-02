@@ -3,6 +3,7 @@
 #include "common.h"
 #define SAVE_FILE        "savegame.txt"
 #define BACKUP_FILE      "savegame.bak"
+#define SAVE_VERSION     1
 #define DEATH_LOG_FILE   "deaths.txt"
 #define LEADERBOARD_FILE "leaderboard.txt"
 #define MAX_LEADERBOARD  10
