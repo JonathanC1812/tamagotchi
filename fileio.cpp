@@ -199,6 +199,15 @@ bool updateLeaderboard(const Pet &pet)
         f << x.date << "|" << x.name << "|" << x.age << "|" << x.score << "\n";
     return true;
 }
+int getLeaderboardRank(const Pet &pet)
+{
+    auto v = readLB();
+    int score = pet.age * 10 + pet.health;
+    int rank = 1;
+    for (auto &x : v)
+        if (x.score > score) rank++;
+    return rank;
+}
 void displayLeaderboard()
 {
     auto v = readLB();

@@ -37,7 +37,7 @@ Tamagotchi Terminal is a text-based virtual pet game played entirely in the Linu
 | Save / load game | Full game state is saved to `savegame.txt` and loaded on resume. Before each save, the previous file is copied to `savegame.bak` as a backup. | File I/O — `ofstream` with binary copy for backup; `restoreBackup()` recovers from `savegame.bak` |
 | Crash-safe loading | If `savegame.txt` is corrupted or incomplete, the game catches the error and falls back to a new game instead of crashing. | Exception handling — `try/catch(...)` wrapping all `stoi`/`stoll` parse calls in `loadGame` |
 | Death log | Every pet death is recorded to `deaths.txt` with name, age, cause, and date. Players can also clear the log via `clearDeathLog()`. | File I/O — append mode for logging, truncate mode for clearing |
-| Leaderboard | Top 10 longest-lived pets are tracked in `leaderboard.txt`. | File I/O |
+| Leaderboard | Top 10 longest-lived pets are tracked in `leaderboard.txt`. Current live rank is computed in real time via `getLeaderboardRank()`. | File I/O — reads and sorts leaderboard entries to compute live rank |
 | Shop system | Players spend gold to buy food, toys, and medicine from a shop. Prices adjust based on difficulty. | Data structures + dynamic memory |
 | Personality system | Each pet is assigned one of four personalities (Cheerful, Grumpy, Lazy, Anxious) that alter how stats decay and respond to actions. | `PersonalityType` enum + conditional logic in stat decay and action functions |
 
@@ -144,7 +144,7 @@ g++ -std=c++11 -Wall -o tamagotchi main.cpp pet.cpp events.cpp actions.cpp items
 | `events.h / events.cpp` | Random event system with difficulty scaling |
 | `actions.h / actions.cpp` | Feed, play, sleep, heal actions |
 | `items.h / items.cpp` | Item definitions, shop, dynamic inventory |
-| `fileio.h / fileio.cpp` | Save/load, backup save, crash-safe loading, death log, clear death log, leaderboard |
+| `fileio.h / fileio.cpp` | Save/load, backup save, crash-safe loading, death log, clear death log, leaderboard, live rank |
 | `ui.h / ui.cpp` | Terminal display, ASCII art, menus |
 | `main.cpp` | Game loop, difficulty selection, turn management |
 | `Makefile` | Build instructions |
