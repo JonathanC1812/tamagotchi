@@ -34,8 +34,9 @@ Tamagotchi Terminal is a text-based virtual pet game played entirely in the Linu
 | Pet stats + life stages | Pet has 4 stats (Hunger, Happiness, Health, Energy) and evolves through 6 life stages based on age and stat thresholds. | Data structures — `Pet` struct, `Item` struct, `LifeStage` enum |
 | Multiple source files | Each module is split into a .h header and .cpp implementation file. | Program in multiple files |
 | Difficulty levels | Easy, Normal, and Hard scale stat drain rate, event frequency, shop prices, and enable/disable permadeath. | `DifficultyLevel` enum + inline helper functions in `common.h` (`drainRate`, `eventChance`, `shopDiscount`, `isPermadeath`) — each module calls these instead of hardcoding values |
-| Save / load game | Full game state is saved to `savegame.txt` and loaded on resume. | File I/O |
-| Death log | Every pet death is recorded to `deaths.txt` with name, age, cause, and date. | File I/O |
+| Save / load game | Full game state is saved to `savegame.txt` and loaded on resume. Before each save, the previous file is copied to `savegame.bak` as a backup. | File I/O — `ofstream` with binary copy for backup; `restoreBackup()` recovers from `savegame.bak` |
+| Crash-safe loading | If `savegame.txt` is corrupted or incomplete, the game catches the error and falls back to a new game instead of crashing. | Exception handling — `try/catch(...)` wrapping all `stoi`/`stoll` parse calls in `loadGame` |
+| Death log | Every pet death is recorded to `deaths.txt` with name, age, cause, and date. Players can also clear the log via `clearDeathLog()`. | File I/O — append mode for logging, truncate mode for clearing |
 | Leaderboard | Top 10 longest-lived pets are tracked in `leaderboard.txt`. | File I/O |
 | Shop system | Players spend gold to buy food, toys, and medicine from a shop. Prices adjust based on difficulty. | Data structures + dynamic memory |
 | Personality system | Each pet is assigned one of four personalities (Cheerful, Grumpy, Lazy, Anxious) that alter how stats decay and respond to actions. | `PersonalityType` enum + conditional logic in stat decay and action functions |
@@ -128,6 +129,7 @@ g++ -std=c++11 -Wall -o tamagotchi main.cpp pet.cpp events.cpp actions.cpp items
 | File | Contents |
 |------|----------|
 | `savegame.txt` | Current pet state and last save timestamp |
+| `savegame.bak` | Backup of the previous save; auto-created before each save |
 | `deaths.txt` | Log of all pet deaths with cause and date |
 | `leaderboard.txt` | Top 10 longest-lived pets sorted by score |
 
@@ -142,7 +144,7 @@ g++ -std=c++11 -Wall -o tamagotchi main.cpp pet.cpp events.cpp actions.cpp items
 | `events.h / events.cpp` | Random event system with difficulty scaling |
 | `actions.h / actions.cpp` | Feed, play, sleep, heal actions |
 | `items.h / items.cpp` | Item definitions, shop, dynamic inventory |
-| `fileio.h / fileio.cpp` | Save/load, death log, leaderboard |
+| `fileio.h / fileio.cpp` | Save/load, backup save, crash-safe loading, death log, clear death log, leaderboard |
 | `ui.h / ui.cpp` | Terminal display, ASCII art, menus |
 | `main.cpp` | Game loop, difficulty selection, turn management |
 | `Makefile` | Build instructions |
@@ -161,9 +163,9 @@ g++ -std=c++11 -Wall -o tamagotchi main.cpp pet.cpp events.cpp actions.cpp items
 ```
 
 **"Load failed. Starting new game." on Continue**
-The `savegame.txt` file is missing or corrupted. Delete it and start a new game:
+The `savegame.txt` file is corrupted. The game will start fresh automatically. If a backup exists, you can restore it manually:
 ```
-rm savegame.txt
+cp savegame.bak savegame.txt
 ```
 
 **Pet stats look wrong after resuming**

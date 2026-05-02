@@ -15,4 +15,5 @@ bool logDeath(const Pet& pet, const std::string& cause, DifficultyLevel diff);
 bool updateLeaderboard(const Pet& pet);
 void displayLeaderboard();
 void displayDeathLog();
+bool clearDeathLog();
 #endif

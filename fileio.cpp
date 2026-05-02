@@ -233,3 +233,8 @@ void displayDeathLog()
         cout << "  (no deaths yet)\n";
     cout << "\n";
 }
+bool clearDeathLog()
+{
+    ofstream f(DEATH_LOG_FILE, ios::trunc);
+    return f.is_open();
+}
