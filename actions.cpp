@@ -81,30 +81,50 @@ std::string actionFeed(GameState &gs, int idx)
 std::string actionPlay(GameState &gs, int idx)
 {
     Pet &p = gs.pet;
+
     if (!canAct(p))
         return "Pet cannot play now.";
-    if (p.energy <= 10)
-        return p.name + " is too tired! Let them sleep.";
+
+    std::string msg;
+
     if (idx == -1)
     {
         p.happiness += 10;
         p.energy -= 8;
         p.weight -= 1;
+
+        msg = "You played with " + p.name + "!\n\n";
+        msg += "    /\\__/\\\n";
+        msg += "   ( > ᴗ <)\n";
+        msg += "   / づ♡♡♡\n";
+
         clampStats(p);
-        return "You played with " + p.name + "!";
+        return msg;
     }
+
     if (idx >= (int)p.inventory.size())
         return "Invalid item.";
+
     Item &toy = p.inventory[idx];
+
     if (toy.type != TOY)
         return "That is not a toy!";
+
     p.happiness += toy.happyMod;
     p.energy -= 8;
     p.weight -= 2;
+
     std::string tn = toy.name;
+
+    msg = p.name + " played with the " + tn + "!\n\n";
+    msg += "   /\\__/\\\n";
+    msg += "  ( > ᴗ <)\n";
+    msg += "   / づ♡♡♡\n";
+
     p.inventory.erase(p.inventory.begin() + idx);
     clampStats(p);
-    return p.name + " played with the " + tn + "!";
+
+    return msg;
 }
 std::string actionSleep(GameState &gs)
 {
