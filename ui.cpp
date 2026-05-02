@@ -90,8 +90,8 @@ void drawPetArt(LifeStage s) {
                 "         =( x _ x )=\n"
                 "           |⊃   ⊂|\n";
         break;
-    cout << "\n";
     }
+    cout << "\n";
 }
 
 /* ---------- screens ---------- */
