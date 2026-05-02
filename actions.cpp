@@ -139,6 +139,64 @@ std::string actionHeal(GameState &gs, int idx)
     clampStats(p);
     return "Gave " + p.name + " " + mn + ". Health restored!";
 }
+
+std::string actionWork(GameState &gs, int left, int right, char op, int answer)
+{
+    Pet &p = gs.pet;
+    if (!canAct(p))
+        return "Pet cannot work now.";
+    if (p.energy < 15)
+        return p.name + " is too tired to work!";
+    if (p.happiness < 10)
+        return p.name + " is too sad to work!";
+
+    int correct = 0;
+    switch (op)
+    {
+    case '+':
+        correct = left + right;
+        break;
+    case '-':
+        correct = left - right;
+        break;
+    case '*':
+        correct = left * right;
+        break;
+    default:
+        return "Invalid work equation.";
+    }
+
+    p.energy -= 10;
+    p.happiness -= 2;
+    p.cleanliness -= 3;
+
+    if (answer == correct)
+    {
+        int reward = 8 + rand() % 8;
+        p.gold += reward;
+        clampStats(p);
+        return "Correct! " + p.name + " earned " + std::to_string(reward) + " gold.";
+    }
+
+    clampStats(p);
+    return "Wrong answer. The correct answer was " + std::to_string(correct) + ". No gold earned.";
+}
+
+std::string actionBath(GameState &gs)
+{
+    Pet &p = gs.pet;
+    if (!canAct(p))
+        return "Pet cannot take a bath now.";
+    if (p.cleanliness >= 95)
+        return p.name + " is already clean!";
+
+    int gained = 100 - p.cleanliness;
+    p.cleanliness = 100;
+    p.happiness += 3;
+    p.energy -= 5;
+    clampStats(p);
+    return p.name + " took a bath! Cleanliness +" + std::to_string(gained) + ".";
+}
 std::string actionStatus(const GameState &gs)
 {
     const Pet &p = gs.pet;
@@ -161,6 +219,7 @@ std::string actionStatus(const GameState &gs)
       << "  Happiness: " << bar(p.happiness) << "  " << p.happiness << "%\n"
       << "  Health:    " << bar(p.health) << "  " << p.health << "%\n"
       << "  Energy:    " << bar(p.energy) << "  " << p.energy << "%\n";
+      << "  Clean:     " << bar(p.cleanliness) << "  " << p.cleanliness << "%\n";
     if (p.isSick)
         o << "  !! SICK !! Use medicine!\n";
     if (!p.tricksLearned.empty())
