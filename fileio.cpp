@@ -11,6 +11,11 @@ using namespace std;
 
 bool saveGame(const GameState &gs)
 {
+    ifstream src(SAVE_FILE, ios::binary);
+    if (src.is_open()) {
+        ofstream dst(BACKUP_FILE, ios::binary);
+        dst << src.rdbuf();
+    }
     ofstream f(SAVE_FILE);
     if (!f.is_open())
         return false;
@@ -47,56 +52,64 @@ bool loadGame(GameState &gs)
     ifstream f(SAVE_FILE);
     if (!f.is_open())
         return false;
-    Pet &p = gs.pet;
-    long long savedTime = 0;
-    p.name = rv(f);
-    p.hunger = stoi(rv(f));
-    p.happiness = stoi(rv(f));
-    p.health = stoi(rv(f));
-    p.energy = stoi(rv(f));
-    p.cleanliness = stoi(rv(f));
-    p.weight = stoi(rv(f));
-    p.age = stoi(rv(f));
-    p.gold = stoi(rv(f));
-    p.isSick = stoi(rv(f));
-    p.stage = (LifeStage)stoi(rv(f));
-    gs.difficulty = (DifficultyLevel)stoi(rv(f));
-    gs.turnCount = stoi(rv(f));
-    savedTime = stoll(rv(f));
-    p.personality = (PersonalityType)stoi(rv(f));
-    p.favoriteFoodName = rv(f);
-    p.dislikedFoodName = rv(f);
-    p.isSleeping = false;
-    p.refusesFood = false;
-    p.refusedFoodName = "";
-    int tc = stoi(rv(f));
-    p.tricksLearned.clear();
-    for (int i = 0; i < tc; i++)
-        p.tricksLearned.push_back(rv(f));
-    int ic = stoi(rv(f));
-    p.inventory.clear();
-    for (int i = 0; i < ic; i++)
+    try
     {
-        Item it;
-        it.name = rv(f);
-        it.type = (ItemType)stoi(rv(f));
-        it.hungerMod = stoi(rv(f));
-        it.happyMod = stoi(rv(f));
-        it.healthMod = stoi(rv(f));
-        it.energyMod = stoi(rv(f));
-        it.weightMod = stoi(rv(f));
-        it.price = stoi(rv(f));
-        p.inventory.push_back(it);
+        Pet &p = gs.pet;
+        long long savedTime = 0;
+        p.name = rv(f);
+        p.hunger = stoi(rv(f));
+        p.happiness = stoi(rv(f));
+        p.health = stoi(rv(f));
+        p.energy = stoi(rv(f));
+        p.cleanliness = stoi(rv(f));
+        p.weight = stoi(rv(f));
+        p.age = stoi(rv(f));
+        p.gold = stoi(rv(f));
+        p.isSick = stoi(rv(f));
+        p.stage = (LifeStage)stoi(rv(f));
+        gs.difficulty = (DifficultyLevel)stoi(rv(f));
+        gs.turnCount = stoi(rv(f));
+        savedTime = stoll(rv(f));
+        p.personality = (PersonalityType)stoi(rv(f));
+        p.favoriteFoodName = rv(f);
+        p.dislikedFoodName = rv(f);
+        p.isSleeping = false;
+        p.refusesFood = false;
+        p.refusedFoodName = "";
+        int tc = stoi(rv(f));
+        p.tricksLearned.clear();
+        for (int i = 0; i < tc; i++)
+            p.tricksLearned.push_back(rv(f));
+        int ic = stoi(rv(f));
+        p.inventory.clear();
+        for (int i = 0; i < ic; i++)
+        {
+            Item it;
+            it.name = rv(f);
+            it.type = (ItemType)stoi(rv(f));
+            it.hungerMod = stoi(rv(f));
+            it.happyMod = stoi(rv(f));
+            it.healthMod = stoi(rv(f));
+            it.energyMod = stoi(rv(f));
+            it.weightMod = stoi(rv(f));
+            it.price = stoi(rv(f));
+            p.inventory.push_back(it);
+        }
+        long elapsed = (long)(time(nullptr) - savedTime);
+        if (elapsed > 0)
+        {
+            cout << "\n  [" << elapsed / 60 << " min passed while away]\n";
+            applyTimedDecay(p, gs.difficulty, elapsed);
+        }
+        gs.running = true;
+        gs.message = "Welcome back, " + p.name + "!";
+        return true;
     }
-    long elapsed = (long)(time(nullptr) - savedTime);
-    if (elapsed > 0)
+    catch (...)
     {
-        cout << "\n  [" << elapsed / 60 << " min passed while away]\n";
-        applyTimedDecay(p, gs.difficulty, elapsed);
+        cout << "\n  [Save file corrupted. Could not load.]\n";
+        return false;
     }
-    gs.running = true;
-    gs.message = "Welcome back, " + p.name + "!";
-    return true;
 }
 bool saveFileExists()
 {
@@ -104,6 +117,15 @@ bool saveFileExists()
     return f.good();
 }
 bool deleteSaveFile() { return remove(SAVE_FILE) == 0; }
+bool restoreBackup()
+{
+    ifstream src(BACKUP_FILE, ios::binary);
+    if (!src.is_open())
+        return false;
+    ofstream dst(SAVE_FILE, ios::binary);
+    dst << src.rdbuf();
+    return dst.good();
+}
 bool logDeath(const Pet &pet, const string &cause, DifficultyLevel diff)
 {
     ofstream f(DEATH_LOG_FILE, ios::app);
