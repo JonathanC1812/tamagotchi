@@ -220,8 +220,6 @@ std::string actionStatus(const GameState &gs)
       << "  Health:    " << bar(p.health) << "  " << p.health << "%\n"
       << "  Energy:    " << bar(p.energy) << "  " << p.energy << "%\n"
       << "  Clean:     " << bar(p.cleanliness) << "  " << p.cleanliness << "%\n";
-    if (p.isSick)
-        o << "  !! SICK !! Use medicine!\n";
     if (!p.tricksLearned.empty())
     {
         o << "  Tricks: ";
