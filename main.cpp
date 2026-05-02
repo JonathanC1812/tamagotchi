@@ -93,6 +93,8 @@ static GameState newGame(){
     gs.difficulty=chooseDifficulty();
     gs.pet=initPet(name,gs.difficulty);
     gs.turnCount=0; gs.running=true;
+    gs.luckyNumber   = 1 + rand() % 9;
+    gs.luckyTurnBase = 0;
     gs.message = "Welcome! " + name + " has hatched. " + "Personality: " + personalityName(gs.pet.personality) + ". Fav food: " + gs.pet.favoriteFoodName + "!";
     giveStarterItems(gs.pet);
     return gs;
@@ -116,6 +118,9 @@ int main(){
         if(!loadGame(gs)){
             std::cout<<"  Load failed. Starting new game.\n";
             pressEnterToContinue(); gs=newGame();
+        } else {
+            gs.luckyNumber   = 1 + rand() % 9;
+            gs.luckyTurnBase = gs.turnCount;
         }
     } else gs=newGame();
 
@@ -166,8 +171,23 @@ int main(){
         }
 
         if(!skipTurn){
+            if(choice == gs.luckyNumber && choice >= 1 && choice <= 9){
+                int goldBonus     = 5 + rand() % 6;   // 5-10 gold
+                int happyBonus    = 5 + rand() % 6;   // 5-10 happiness
+                gs.pet.gold      += goldBonus;
+                gs.pet.happiness += happyBonus;
+                clampStats(gs.pet);
+                gs.message += " | LUCKY [" + std::to_string(gs.luckyNumber)
+                            + "]! +" + std::to_string(goldBonus)
+                            + "g +" + std::to_string(happyBonus) + " happiness!";
+            }
             bool evolved=false; std::string dc;
             runTurnEnd(gs,evolved,dc);
+            if(gs.turnCount % 5 == 0 && gs.turnCount != gs.luckyTurnBase){
+                gs.luckyNumber   = 1 + rand() % 9;
+                gs.luckyTurnBase = gs.turnCount;
+                gs.message += " | New lucky number: [" + std::to_string(gs.luckyNumber) + "]!";
+            }
             if(evolved) showEvolutionScreen(gs.pet);
             if(gs.pet.stage==DEAD){
                 showDeathScreen(gs.pet,dc);
