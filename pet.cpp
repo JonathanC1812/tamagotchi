@@ -46,6 +46,7 @@ void clampStats(Pet &p)
     p.happiness = max(0, min(100, p.happiness));
     p.health = max(0, min(100, p.health));
     p.energy = max(0, min(100, p.energy));
+    p.cleanliness = max(0, min(100, p.cleanliness));
     p.weight = max(5, min(50, p.weight));
     p.gold = max(0, p.gold);
 }
