@@ -119,7 +119,7 @@ std::string actionPlay(GameState &gs, int idx)
     msg = p.name + " played with the " + tn + "!\n\n";
     msg += "   /\\__/\\\n";
     msg += "  ( > ᴗ <)\n";
-    msg += "   / づ♡♡♡\n";
+    msg += "   / づ♡♡♡\n\n";
 
     p.inventory.erase(p.inventory.begin() + idx);
     clampStats(p);
@@ -138,8 +138,16 @@ std::string actionSleep(GameState &gs)
     p.health += 5;
     if (p.isSick && gs.difficulty != HARD && rand() % 100 < 40)
         p.isSick = false;
+    
     clampStats(p);
-    return p.name + " slept well! Energy +" + std::to_string(r) + ".";
+    
+    std::string msg = p.name + " slept well! Energy +" + std::to_string(r) + ".\n\n";
+
+    msg += "   zzz\n";
+    msg += " γ ⌒ヽ/\\__/\\\n";
+    msg += "（\"_)(-˕ -,,)\n\n";
+
+    return msg;
 }
 std::string actionHeal(GameState &gs, int idx)
 {
