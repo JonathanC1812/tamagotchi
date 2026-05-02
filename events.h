@@ -1,5 +1,5 @@
-#ifndef events.h
-#define events.h
+#ifndef EVENTS_H
+#define EVENTS_H
 #include "common.h"
 #include <string>
 std::string rollEvent(GameState& gs);
