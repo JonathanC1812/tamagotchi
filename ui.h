@@ -6,6 +6,7 @@ void drawMainScreen(const GameState& gs);
 void drawPetArt(LifeStage stage);
 void drawStatBars(const Pet& pet);
 void showMainMenu(const GameState& gs);
+void showIntroStory(const std::string& name);
 void showWelcomeScreen();
 DifficultyLevel chooseDifficulty();
 void showDeathScreen(const Pet& pet, const std::string& cause);
