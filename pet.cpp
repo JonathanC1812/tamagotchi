@@ -84,6 +84,7 @@ void decayStats(Pet &pet, DifficultyLevel diff)
     pet.hunger -= hungerDrain;
     pet.happiness -= happyDrain;
     pet.energy -= energyDrain;
+    pet.cleanliness -= dr;
     pet.weight += weightGain;
 
     // adding health consequences
@@ -96,6 +97,8 @@ void decayStats(Pet &pet, DifficultyLevel diff)
     if (pet.weight > 40)
         pet.health -= 1;
     if (pet.happiness <= 10)
+        pet.health -= 1;
+    if (pet.cleanliness <= 0)
         pet.health -= 1;
 
     // ANXIOUS penalty: extra health drain when multiple stats are low
