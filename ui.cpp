@@ -44,46 +44,54 @@ static string bar(int v) {
 
 void drawPetArt(LifeStage s) {
     cout << "\n";
+
     switch (s) {
+
     case EGG:
-        cout << "       .--.\n"
-                "      /    \\\n"
-                "      |˶•  •˶|\n"
-                "      \\  ⤙ /\n"
-                "       `--'\n";
+        cout << "        /\\___/\\\n"
+                "       (๑> ᴗ <๑)\n"
+                "       /  ___  \\\n"
+                "      (  /   \\  )\n"
+                "       `-.___.-'\n";
         break;
+
     case BABY:
-        cout << "      (^_^)\n"
-                "     /|  |\\\n"
-                "       /  \\\n";
+        cout << "           /\\___/\\\n"
+                "          (˵- ﻌ -˵)~\n"
+                "           |⊃   ⊂|\n";
         break;
+
     case CHILD:
-        cout << "    \\(^_^)/\n"
-                "      |   |\n"
-                "      / \\\n";
+        cout << "           /\\___/\\\n"
+                "          (｡> ﻌ <｡)⸝♡\n"
+                "           |⊃   ⊂|\n";
         break;
+
     case TEEN:
-        cout << "     (>_<)/\n"
-                "     /|   |\n"
-                "      / \\\n";
+        cout << "           /\\___/\\\n"
+                "         ≽( • ⩊ • )≼\n"
+                "           |⊃   ⊂|\n";
         break;
+
     case ADULT:
-        cout << "     (*v*)\n"
-                "     /|   |\\\n"
-                "      / \\\n";
+        cout << "           /\\___/\\\n"
+                "         =( • ﻌ • )=\n"
+                "           |⊃   ⊂|\n";
         break;
+
     case SENIOR:
-        cout << "     (u_u)~\n"
-                "     /|   |\\\n"
-                "      / \\\n";
+        cout << "           /\\___/\\\n"
+                "         =( ≖ ᴥ ≖ )=\n"
+                "           |⊃   ⊂|\n";
         break;
+
     case DEAD:
-        cout << "     (x_x)\n"
-                "      /|\\\n"
-                "      / \\\n";
+        cout << "           /\\___/\\\n"
+                "         =( x _ x )=\n"
+                "           |⊃   ⊂|\n";
         break;
-    }
     cout << "\n";
+    }
 }
 
 /* ---------- screens ---------- */
@@ -160,8 +168,13 @@ void drawMainScreen(const GameState& gs) {
     cout << "  Weight: " << p.weight << "g"
          << "   Gold: " << p.gold << "\n";
 
-    if (p.isSick)
-        cout << "  !! PET IS SICK !! Use medicine!\n";
+    if (p.isSick) {
+    cout << "           /\\___/\\\n"
+            "         =( x _ x )=\n"
+            "           / ~~~ \\\n"
+            "          (weak...)\n";
+    cout << "  !! PET IS SICK !! Use medicine!\n";
+    }
 
     drawMoodIndicator(p); 
     cout << "  Lucky #: [" << gs.luckyNumber << "]  "
