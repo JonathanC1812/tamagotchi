@@ -81,7 +81,7 @@ void applyNegativeEvent(Pet& pet, DifficultyLevel diff, std::string& msg) {
         case 6:
             pet.health    -= 10 * dr / 2;
             pet.happiness -= 10;
-            msg = pet.name + " has a stomach ache! Maybe ate too much recently.";
+            msg = pet.name + " has a stomachache! Maybe ate too much recently.";
             break;
         case 7:
             pet.energy    -= 25 * dr / 2;
