@@ -26,6 +26,8 @@ bool saveGame(const GameState &gs)
       << "\nage=" << p.age << "\ngold=" << p.gold << "\nisSick=" << p.isSick
       << "\nstage=" << (int)p.stage << "\ndifficulty=" << (int)gs.difficulty
       << "\nturnCount=" << gs.turnCount << "\nsaveTime=" << (long long)time(nullptr) << "\n";
+    f << "luckyNumber=" << gs.luckyNumber
+  << "\nluckyTurnBase=" << gs.luckyTurnBase << "\n";
     f << "personality=" << (int)p.personality
       << "\nfavFood=" << p.favoriteFoodName
       << "\ndislikeFood=" << p.dislikedFoodName << "\n";
@@ -76,6 +78,8 @@ bool loadGame(GameState &gs)
         gs.difficulty = (DifficultyLevel)stoi(rv(f));
         gs.turnCount = stoi(rv(f));
         savedTime = stoll(rv(f));
+        gs.luckyNumber   = stoi(rv(f));
+        gs.luckyTurnBase = stoi(rv(f));
         p.personality = (PersonalityType)stoi(rv(f));
         p.favoriteFoodName = rv(f);
         p.dislikedFoodName = rv(f);
