@@ -219,8 +219,10 @@ int main(){
             gs.message = getHatchMessage(gs.pet);
         }
         else {
-            gs.luckyNumber = 1 + rand() % 9;
-            gs.luckyTurnBase = gs.turnCount;
+            if(gs.luckyNumber < 1 || gs.luckyNumber > 9){
+                gs.luckyNumber   = 1 + rand() % 9;
+                gs.luckyTurnBase = gs.turnCount - 1; // -1 so re-roll can fire normally
+            }
         }
     }
     else {
@@ -338,7 +340,9 @@ int main(){
             runTurnEnd(gs, evolved, dc);
 
             if(gs.turnCount % 5 == 0 && gs.turnCount != gs.luckyTurnBase){
-                gs.luckyNumber = 1 + rand() % 9;
+                int newLucky;
+                do { newLucky = 1 + rand() % 9; } while(newLucky == gs.luckyNumber);
+                gs.luckyNumber   = newLucky;
                 gs.luckyTurnBase = gs.turnCount;
 
                 gs.message += " | New lucky number: [" + to_string(gs.luckyNumber) + "]!";
