@@ -132,7 +132,7 @@ g++ -std=c++11 -Wall -o tamagotchi main.cpp pet.cpp events.cpp actions.cpp items
 
 | File | Contents |
 |------|----------|
-| `savegame.txt` | Current pet state; starts with a version header (`version=1`) to detect incompatible saves |
+| `savegame.txt` | Current pet state; starts with a version header (`version=1`) to detect incompatible saves. Also stores the current lucky number so it persists across sessions. |
 | `savegame.bak` | Backup of the previous save; auto-created before each save |
 | `deaths.txt` | Log of all pet deaths with cause and date |
 | `leaderboard.txt` | Top 10 longest-lived pets sorted by score |
